@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SKILLEDU - Q5</title>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #ffffff;
+      color: #333;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #ffffff;
+      font-weight: bold;
+      color: #2f6fbf;
+      font-size: 24px;
+    }
+
+    .progress-bar {
+      width: 60%;
+      height: 14px;
+      background: #d8e6fc;
+      border-radius: 20px;
+      margin: 15px auto;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      background: #2f6fbf;
+      border-radius: 20px;
+      transition: width 0.6s ease-in-out;
+    }
+
+    .heading {
+      margin: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .option-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 20px;
+    }
+
+    .option-item {
+      background: #e4efff;
+      padding: 14px 18px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .option-item:hover {
+      background: #cbdfff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div><i class="fas fa-bars"></i></div>
+    <div>SKILLEDU</div>
+    <div><i class="fas fa-ellipsis-v"></i></div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress" id="progress"></div>
+  </div>
+
+  <div class="heading">Q5: How much time do you take to learn something?</div>
+
+  <div class="option-list">
+    <div class="option-item" onclick="nextStep(90, 'success.html')">Minimum</div>
+    <div class="option-item" onclick="nextStep(90, 'success.html')">Maximum</div>
+    <div class="option-item" onclick="nextStep(90, 'success.html')">Take a lot</div>
+  </div>
+  
+
+  <script>
+  const baseProgress = 75;
+  const increment = 15;
+
+  const progress = document.getElementById('progress');
+
+  // page load animation
+  progress.style.width = baseProgress + '%';
+
+  setTimeout(() => {
+    const newProgress = baseProgress + increment;
+    progress.style.width = newProgress + '%';
+    localStorage.setItem('progress', newProgress);
+  }, 200);
+
+  // FIXED click logic
+  function nextStep(value, nextPage) {
+    // pehle 100% dikhao
+    progress.style.width = '100%';
+    localStorage.setItem('progress', 100);
+
+    // thoda wait, phir page change
+    setTimeout(() => {
+      window.location.href = nextPage;
+    }, 500); // animation dikhne ka time
+  }
+</script>
+
+
+</body>
+</html>

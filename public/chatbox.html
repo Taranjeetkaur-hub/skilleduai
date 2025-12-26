@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SKILLEDU - Chat</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f6f9ff;
+  color: #333;
+}
+
+
+    
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      font-weight: bold;
+      color: #2f6fbf;
+      font-size: 22px;
+    }
+
+    .container {
+  padding: 20px;
+  padding-bottom: 90px;
+}
+
+
+    /* Top Feature Boxes */
+    .feature-boxes {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .feature {
+      flex: 1;
+      background: #e4efff;
+      border-radius: 16px;
+      padding: 15px;
+      text-align: center;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    }
+
+    .feature:hover {
+      background: #d1e3ff;
+      transform: translateY(-3px);
+    }
+
+    .feature i {
+      display: block;
+      font-size: 28px;
+      color: #2f6fbf;
+      margin-bottom: 8px;
+    }
+
+    .chat-box {
+  height: calc(100vh - 220px);
+  overflow-y: auto;
+}
+
+
+    .message {
+      margin: 12px 0;
+      max-width: 75%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      line-height: 1.5;
+    }
+
+    .bot {
+      background: #e4efff;
+      align-self: flex-start;
+    }
+
+    .user {
+      background: #d1e3ff;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+
+    .input-area {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  background: #fff;
+  border-radius: 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+
+
+    .input-area input {
+      border: none;
+      flex: 1;
+      padding: 12px 18px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .input-area button {
+      background: #2f6fbf;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .input-area button:hover {
+      background: #1f4f8f;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div><i class="fas fa-bars"></i></div>
+    <div>SKILLEDU</div>
+    <div><i class="fas fa-ellipsis-v"></i></div>
+  </div>
+
+  <div class="container">
+    <div class="feature-boxes">
+      <div class="feature"><i class="fas fa-video"></i> Video</div>
+      <div class="feature"><i class="fas fa-microphone"></i> Voice</div>
+      <div class="feature"><i class="fas fa-font"></i> Text</div>
+    </div>
+
+    <div class="chat-box" id="chatBox">
+      <div class="message bot"> Welcome to SKILLEDU! Let's continue learning where you left off.</div>
+      <div class="message user">Sure, let's go!</div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+  function sendMessage() {
+    const input = document.getElementById("userInput");
+    const message = input.value.trim();
+    if (!message) return;
+
+    const chatBox = document.getElementById("chatBox");
+
+    const userMsg = document.createElement("div");
+    userMsg.className = "message user";
+    userMsg.textContent = message;
+    chatBox.appendChild(userMsg);
+
+    input.value = "";
+
+    setTimeout(() => {
+      const botMsg = document.createElement("div");
+      botMsg.className = "message bot";
+      botMsg.textContent = "Got it! Let’s continue learning.";
+      chatBox.appendChild(botMsg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }, 800);
+  }
+</script>
+
+  <script>
+    async function sendMessage() {
+  const input = document.getElementById("userInput");
+  const message = input.value.trim();
+  if (!message) return;
+
+  const chatBox = document.getElementById("chatBox");
+
+  chatBox.innerHTML += `<div class="message user">${message}</div>`;
+  input.value = "";
+
+  const res = await fetch("https://your-backend.onrender.com/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message })
+  });
+
+  const data = await res.json();
+  chatBox.innerHTML += `<div class="message bot">${data.reply}</div>`;
+}
+
+  </script>
+</body>
+</html>

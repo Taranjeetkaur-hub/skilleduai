@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SKILLEDU - Q4</title>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #ffffff;
+      color: #333;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #ffffff;
+      font-weight: bold;
+      color: #2f6fbf;
+      font-size: 24px;
+    }
+
+    .progress-bar {
+      width: 60%;
+      height: 14px;
+      background: #d8e6fc;
+      border-radius: 20px;
+      margin: 15px auto;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      background: #2f6fbf;
+      border-radius: 20px;
+      transition: width 0.6s ease-in-out;
+    }
+
+    .heading {
+      margin: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .option-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 20px;
+    }
+
+    .option-item {
+      background: #e4efff;
+      padding: 14px 18px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .option-item:hover {
+      background: #cbdfff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div><i class="fas fa-bars"></i></div>
+    <div>SKILLEDU</div>
+    <div><i class="fas fa-ellipsis-v"></i></div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress" id="progress"></div>
+  </div>
+
+  <div class="heading">Q4:Which language is easy or you ?</div>
+
+  <div class="option-list">
+    <div class="option-item" onclick="nextStep(75, 'q5.html')">English</div>
+    <div class="option-item" onclick="nextStep(75, 'q5.html')">Hindi</div>
+    <div class="option-item" onclick="nextStep(75, 'q5.html')">Hinglish</div>
+  </div>
+
+  <script>
+  // fixed starting progress (already completed)
+  const baseProgress = 60; // pehle se 20%
+  const increment = 15;    // aur 20% load hoga
+
+  const progress = document.getElementById('progress');
+
+  // pehle hi bar ko 20% par set karo (no animation)
+  progress.style.width = baseProgress + '%';
+
+  // thoda delay dekar next 20% animate karo
+  setTimeout(() => {
+    const newProgress = baseProgress + increment;
+    progress.style.width = newProgress + '%';
+    localStorage.setItem('progress', newProgress);
+  }, 200);
+
+  // option click hone par
+  function nextStep(value, nextPage) {
+    progress.style.width = value + '%';
+    localStorage.setItem('progress', value);
+    setTimeout(() => {
+      window.location.href = nextPage;
+    }, 150);
+  }
+</script>
+
+</body>
+</html>

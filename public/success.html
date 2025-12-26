@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Congratulations - SKILLEDU</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #e6f0ff, #ffffff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .congrats-box {
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .congrats-box h1 {
+      font-size: 42px;
+      color: #2f6fbf;
+      margin-bottom: 10px;
+    }
+
+    .congrats-box p {
+      font-size: 20px;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .continue-btn {
+      background: #2f6fbf;
+      color: white;
+      font-size: 18px;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .continue-btn:hover {
+      background: #1d4e8f;
+      transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="congrats-box">
+    <h1> Congratulations!</h1>
+    <p>You’ve completed this section successfully.<br>Let’s continue your learning journey!</p>
+    <button class="continue-btn" onclick="continueNext()">Continue</button>
+  </div>
+
+  <script>
+    function continueNext() {
+      window.location.href = "chatbox.html"; // ← change to your next page
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkilledU Home</title>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --blue-100: #E7F3FF;
+      --blue-200: #cfe8ff;
+      --blue-700: #1b3d6b;
+      --navy: #0F1E3D;
+      --accent: #2f6fbf;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #ffffff;
+      color: #333;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #ffffff;
+      font-weight: bold;
+      color: #2f6fbf;
+      font-size: 24px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .navbar .menu,
+    .navbar .more {
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .heading {
+      margin: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      color: #333;
+    }
+
+    .course-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 20px;
+      margin-bottom: 70px;
+    }
+
+    .course-item {
+      background: #e4efff;
+      padding: 12px 16px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .course-item:hover {
+      background: #cbdfff;
+    }
+
+    .course-item i {
+      margin-right: 10px;
+      font-size: 18px;
+      color: #2f6fbf;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #e4efff;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-top: 1px solid #ccc;
+    }
+
+    .bottom-nav i {
+      font-size: 20px;
+      cursor: pointer;
+      color: #2f6fbf;
+    }
+
+    /* BACKDROP */
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.40);
+      backdrop-filter: blur(3px);
+      opacity: 0;
+      visibility: hidden;
+      transition: .3s;
+      z-index: 60;
+    }
+    .backdrop.show { opacity: 1; visibility: visible; }
+
+    /* DRAWER */
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 80%;
+      max-width: 380px;
+      background: linear-gradient(180deg, var(--blue-100), #ffffff);
+      box-shadow: 5px 0 25px rgba(0,0,0,0.12);
+      transform: translateX(-100%);
+      transition: .33s cubic-bezier(.25,.8,.25,1);
+      z-index: 70;
+      padding: 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .drawer.show { transform: translateX(0); }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .profile { display: flex; gap: 12px; align-items: center; }
+    .avatar {
+      width: 55px;
+      height: 55px;
+      background: #e7f3ff;
+      color: #2f6fbf;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    /* STYLE-1 PREMIUM MENU */
+    .menu-list { margin-top: 18px; display: flex; flex-direction: column; gap: 12px; }
+
+    .menu-item {
+      background: #ffffff;
+      padding: 14px 16px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+      transition: 0.25s ease;
+      border: 1px solid #e5e9ff;
+      color: #0F1E3D;
+    }
+
+    .menu-item:hover {
+      transform: translateX(8px);
+      background: #f4f7ff;
+    }
+
+    .menu-item i {
+      background: #e7f1ff;
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 18px;
+      color: #2f6fbf;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drawer-footer {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .logout {
+      background: #fceaea;
+      padding: 8px 14px;
+      border-radius: 8px;
+      color: #8a1b1b;
+      border: 1px solid #ffb9b9;
+      cursor: pointer;
+    }
+  </style>
+
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="menu" id="openMenu"><i class="fas fa-bars"></i></div>
+    <div>SKILLEDU</div>
+    <div class="more"><i class="fas fa-ellipsis-v"></i></div>
+  </div>
+
+  <div id="backdrop" class="backdrop"></div>
+
+  <!-- DRAWER -->
+  <aside id="drawer" class="drawer">
+
+    <div class="drawer-header">
+      <div class="profile">
+        <div class="avatar">T</div>
+        <div>
+          <h3 style="margin:0;">Taranjeet Kaur</h3>
+          <p style="margin:0;font-size:13px;">Student • Grade 10</p>
+        </div>
+      </div>
+
+      <button id="closeMenu" style="background:none;border:none;font-size:24px;cursor:pointer;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <nav class="menu-list">
+      <div class="menu-item"><i class="fa-solid fa-user"></i> Profile</div>
+      <div class="menu-item"><i class="fa-solid fa-chart-simple"></i> Progress Report</div>
+      <div class="menu-item"><i class="fa-solid fa-bullseye"></i> Daily Goals</div>
+      <div class="menu-item"><i class="fa-solid fa-list-check"></i> My Tests & Quizzes</div>
+      <div class="menu-item"><i class="fa-solid fa-stopwatch"></i> Study Timer</div>
+      <div class="menu-item"><i class="fa-solid fa-file-lines"></i> Assignments</div>
+      <div class="menu-item"><i class="fa-solid fa-bell"></i> Notifications</div>
+
+      <div class="menu-item"><i class="fa-solid fa-gear"></i> Settings</div>
+      <div class="menu-item"><i class="fa-solid fa-circle-question"></i> Help</div>
+    </nav>
+
+    <div class="drawer-footer">
+      <button class="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </div>
+
+  </aside>
+
+  <div class="heading">What do you want to learn!</div>
+
+  <div class="course-list">
+    <div class="course-item"onclick="nextStep('education.html')"><i class="fas fa-book"></i> Education</div>
+    <div class="course-item"onclick="nextStep('coding.html')"><i class="fas fa-laptop-code"></i> Coding</div>
+    <div class="course-item"onclick="nextStep('graphic.html')"><i class="fas fa-paint-brush"></i> Graphic Design</div>
+    <div class="course-item"onclick="nextStep('editing.html')"><i class="fas fa-cut"></i> Editing</div>
+    <div class="course-item"onclick="nextStep('computer(h).html')"><i class="fas fa-desktop"></i> Computer (hardware)</div>
+    <div class="course-item"onclick="nextStep('computer(s).html')"><i class="fas fa-cogs"></i> Computer (software)</div>
+    <div class="course-item"onclick="nextStep('communication.html')"><i class="fas fa-language"></i> English Communication</div>
+    <div class="course-item"onclick="nextStep('homescience.html')"><i class="fas fa-home"></i> Home Science</div>
+    <div class="course-item"onclick="nextStep('bussines.html')"><i class="fas fa-briefcase"></i> Business</div>
+  </div>
+
+  <div class="bottom-nav">
+    <i class="fas fa-home"></i>
+    <i class="fas fa-search"></i>
+    <i class="fas fa-file-lines"></i>
+    <i class="fas fa-robot"onclick="nextStep('chatbox.html')"></i>
+  </div>
+
+<script>
+  const openMenu = document.getElementById('openMenu');
+  const closeMenu = document.getElementById('closeMenu');
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+
+  openMenu.addEventListener('click', () => {
+    drawer.classList.add('show');
+    backdrop.classList.add('show');
+  });
+
+  closeMenu.addEventListener('click', () => {
+    drawer.classList.remove('show');
+    backdrop.classList.remove('show');
+  });
+
+  backdrop.addEventListener('click', () => {
+    drawer.classList.remove('show');
+    backdrop.classList.remove('show');
+  });
+
+  // ✅ YE FUNCTION MISSING THA
+  function nextStep(page) {
+    window.location.href = page;
+  }
+</script>
+
+
+</body>
+</html>

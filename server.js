@@ -16,21 +16,32 @@ const openai = new OpenAI({
 });
 
 app.post("/chat", async (req, res) => {
-  try {
-    const userMessage = req.body.message;
+  const userMessage = req.body.message;
 
-    const response = await openai.responses.create({
-      model: "gpt-4.1-mini",
-      input: userMessage
-    });
-
-    const reply = response.output_text;
-    res.json({ reply });
-
-  } catch (err) {
-    console.error("AI ERROR:", err);
-    res.status(500).json({ reply: "AI failed" });
+  if (!userMessage) {
+    return res.json({ reply: "Message missing" });
   }
+
+  let reply = "AI failed";
+
+  // Retry logic in case of temporary issues
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const response = await openai.responses.create({
+        model: "gpt-3.5-turbo",   // Lightweight model
+        input: userMessage,
+        max_output_tokens: 500     // Limit response size
+      });
+
+      reply = response.output?.[0]?.content?.[0]?.text || "No reply";
+      break; // Successful, exit loop
+    } catch (err) {
+      console.error(`Attempt ${attempt + 1} failed:`, err);
+      if (attempt === 2) return res.status(500).json({ reply });
+    }
+  }
+
+  res.json({ reply });
 });
 
 const PORT = process.env.PORT || 3000;

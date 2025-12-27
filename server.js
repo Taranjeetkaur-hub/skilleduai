@@ -16,35 +16,30 @@ const openai = new OpenAI({
 });
 
 app.post("/chat", async (req, res) => {
-  const userMessage = req.body.message;
-
-  if (!userMessage) {
-    return res.json({ reply: "Message missing" });
-  }
-
-  let reply = "AI failed";
-
-  // Retry logic in case of temporary issues
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      const response = await openai.responses.create({
-        model: "gpt-3.5-turbo",   // Lightweight model
-        input: userMessage,
-        max_output_tokens: 500     // Limit response size
-      });
-
-      reply = response.output?.[0]?.content?.[0]?.text || "No reply";
-      break; // Successful, exit loop
-    } catch (err) {
-      console.error(`Attempt ${attempt + 1} failed:`, err);
-      if (attempt === 2) return res.status(500).json({ reply });
+  try {
+    const userMessage = req.body.message;
+    if (!userMessage) {
+      return res.json({ reply: "Message missing" });
     }
-  }
 
-  res.json({ reply });
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { role: "user", content: userMessage }
+      ],
+      max_tokens: 500
+    });
+
+    const reply = completion.choices[0].message.content;
+    res.json({ reply });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ reply: "AI failed" });
+  }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });

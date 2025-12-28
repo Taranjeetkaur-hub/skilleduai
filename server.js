@@ -5,15 +5,24 @@ import OpenAI from "openai";
 
 dotenv.config();
 
-console.log(process.env.OPENAI_API_KEY ? "KEY OK" : "KEY MISSING");
-
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: "*"
+}));
 app.use(express.json());
 
+// ✅ Health check (VERY IMPORTANT)
+app.get("/", (req, res) => {
+  res.send("Server is running");
+});
+
+// ✅ OpenAI client
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
+
+console.log(process.env.OPENAI_API_KEY ? "KEY OK" : "KEY MISSING");
 
 app.post("/chat", async (req, res) => {
   try {
@@ -22,24 +31,24 @@ app.post("/chat", async (req, res) => {
       return res.json({ reply: "Message missing" });
     }
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "user", content: userMessage }
-      ],
-      max_tokens: 500
+    const response = await openai.responses.create({
+      model: "gpt-4.1-mini",
+      input: userMessage
     });
 
-    const reply = completion.choices[0].message.content;
+    // ✅ SAFE way to read reply
+    const reply =
+      response.output?.[0]?.content?.[0]?.text || "No reply from AI";
+
     res.json({ reply });
 
   } catch (err) {
-    console.error(err);
+    console.error("OPENAI ERROR:", err);
     res.status(500).json({ reply: "AI failed" });
   }
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
